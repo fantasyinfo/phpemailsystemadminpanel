@@ -39,7 +39,9 @@ $inboxQuery = mysqli_query($conn, $sql);
                     <tr>
                         <th scope="row"><?= $row['id']; ?></th>
                         <td><?php getName($row['from_id']); ?></td>
-                        <td><?= $row['messege']; ?></td>
+                        <td><a class="text-black"
+                                href="details.php?id=<?= $row['id']; ?>"><?php echo substr($row['messege'], 0, 5); ?>
+                        </td>
                         <td><?= $row['created_on']; ?></td>
                         <td>
                             <button class="btn btn-danger" id="<?= $row['id']; ?>">Delete</button>

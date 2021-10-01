@@ -2,6 +2,8 @@ $(document).ready(function () {
   // register user
   $("#reg_submit").click(function (e) {
     //$('#submit').disable();
+    $("#reg_submit").val("Please Wait....");
+    $("#reg_submit").attr("disabled", true);
     $(".msg").hide();
     e.preventDefault();
     $.ajax({
@@ -13,11 +15,21 @@ $(document).ready(function () {
 
         if (result.status == 404) {
           $("#usernameerror").show();
+          $("#reg_submit").val("Register");
+          $("#reg_submit").attr("disabled", false);
+        } else if (result.status == 304) {
+          $("#emailError").show();
+          $("#reg_submit").val("Register");
+          $("#reg_submit").attr("disabled", false);
         } else if (result.status == 303) {
           $("#emailError").show();
+          $("#reg_submit").val("Register");
+          $("#reg_submit").attr("disabled", false);
         } else if (result.status == 200) {
           $("#submitMsg").show();
           $("#regForm")[0].reset();
+          $("#reg_submit").val("Register");
+          $("#reg_submit").attr("disabled", false);
         }
         console.log(result);
       },

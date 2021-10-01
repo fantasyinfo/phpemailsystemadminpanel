@@ -26,7 +26,7 @@
                     <input type="email" class="form-control" id="email_id" name="email_id" aria-describedby="emailHelp">
                     <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                     <div id="emailError" class="alert alert-danger msg">
-                        Please Enter a Valid Email Id.
+                        Please Enter a Valid Email Id OR This Email is Already Exits.
                     </div>
                 </div>
                 <div class="mb-3">
@@ -37,7 +37,7 @@
                 <button type="submit" name="submit" id="reg_submit" class="btn btn-primary">Register</button>
             </form>
             <div id="submitMsg" class="alert alert-success msg">
-                You Have Register Successfully Login Now;
+                We have sent you an verification link on your given email, click the link to verify then login.
             </div>
 
         </div>

@@ -15,13 +15,28 @@ if (isset($_POST['register'])) {
     $userPassword = getSafeData($_POST['password']);
     $userPassword = md5($userPassword);
     $statusInsert = 0;
+    $rand_no = rand("0123456789abcdefghijklmnopqrstuvwxyz", "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    $rand_no_1 = str_shuffle($rand_no);
+    // $rand_no_2 = $rand_no_1 . substr($rand_no, 0, 10);
+    // $rand_no_3 = $rand_no_2 . time();
+    // $sendRandNo = $rand_no_3;
+    // echo $rand_no;
     $createdOn = date('d, m , Y');
     if ($userEmail == '') {
         $status = 303;
         $msg = "Please Enter Valid Email Id";
         $error = true;
     }
-    $userNameSearch = mysqli_query($conn, "select username from users where username = '{$userName}'");
+    $userEmailSearch = mysqli_query($conn, "select * from users where email_id = '{$userEmail}'");
+    if ($userEmailSearch) {
+        if (mysqli_num_rows($userEmailSearch) > 0) {
+            $status = 304;
+            $msg = "Email Already Exists";
+            $error = true;
+        }
+    }
+
+    $userNameSearch = mysqli_query($conn, "select * from users where username = '{$userName}'");
     if ($userNameSearch) {
         if (mysqli_num_rows($userNameSearch) > 0) {
             $status = 404;
@@ -29,19 +44,21 @@ if (isset($_POST['register'])) {
             $error = true;
         }
     }
+
+
     if ($error != true && isset($_POST['email_id']) && !empty($_POST['email_id'])) {
-        $sql = "insert into users (username, email_id, password, status, created_on ) values ('{$userName}','{$userEmail}','{$userPassword}','{$statusInsert}', now())";
+        $sql = "insert into users (username, email_id, password, status, rand_no, created_on ) values ('{$userName}','{$userEmail}','{$userPassword}','{$statusInsert}', '{$rand_no_1}',now())";
 
         $insertQuery = mysqli_query($conn, $sql);
         if ($insertQuery) {
             $status = 200;
             $msg = "Your Data Inserted Succefully ";
             $userInsertId = mysqli_insert_id($conn);
-            $subject = "Please Click on Verify Link to Verify Your Email Id for Login to Our Site";
-            $msg = "<h1>Hi, $userName </h1> Please Click On Below Link To Veify Your Email Id With us to Login Succesfully";
-            $msg .= "</br>";
-            $msg .= "http://localhost/gmailsystem/verify.php?id=$userInsertId";
-            sendMail($userEmail, $subject, $msg);
+            $subject = "Verify Link to Verify Your Email Id for Login to Our Site";
+            $msg_mail = "<h1>Hi, $userName </h1> Please Click On Below Link To Veify Your Email Id With us to Login Succesfully   ";
+            $msg_mail .= "</br>";
+            $msg_mail .= "http://localhost/gmailsystem/verify.php?id=$rand_no_1";
+            sendMail($userEmail, $subject, $msg_mail);
             $error = false;
         }
     }

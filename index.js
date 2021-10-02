@@ -63,8 +63,6 @@ $(document).ready(function () {
     });
   });
 
-  // delete user send to trash
-
   // sending email to user
   $("#ComposeFrm").on("submit", function (e) {
     //$('#submit').disable();
@@ -80,9 +78,43 @@ $(document).ready(function () {
         if (result.status == 200) {
           $("#Msg").show();
           $("#ComposeFrm")[0].reset();
-          window.location.href = "inbox.php";
+          window.location.href = "send.php";
         }
       },
     });
   });
 }); // document ready function ends here
+
+// delete form inbox to transh
+function inbox_delete_msg(id) {
+  jQuery.ajax({
+    url: "manage.php",
+    data: "inbox_id=" + id,
+    method: "post",
+    success: function (response) {
+      response = jQuery.parseJSON(response);
+      console.log(response);
+      if (response.status == 200) {
+        //alert("hello");
+        jQuery("#inbox_msg_id_" + id).hide();
+      }
+    },
+  });
+}
+
+// delete from send to trash
+function send_delete_msg(id) {
+  jQuery.ajax({
+    url: "manage.php",
+    data: "send_id=" + id,
+    method: "post",
+    success: function (response) {
+      response = jQuery.parseJSON(response);
+      console.log(response);
+      if (response.status == 200) {
+        //alert("hello");
+        jQuery("#send_msg_id_" + id).hide();
+      }
+    },
+  });
+}

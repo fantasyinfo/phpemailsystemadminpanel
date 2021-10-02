@@ -8,7 +8,7 @@ $msg = "";
 $status = "";
 
 
-
+// register
 if (isset($_POST['register'])) {
     $userName = getSafeData($_POST['username']);
     $userEmail = getSafeData($_POST['email_id']);
@@ -70,7 +70,7 @@ if (isset($_POST['register'])) {
     echo json_encode($data);
 }
 
-
+// login
 if (isset($_POST['login'])) {
     $userName = getSafeData($_POST['username']);
     $userPassword = getSafeData($_POST['password']);
@@ -124,7 +124,7 @@ if (isset($_POST['login'])) {
     ];
     echo json_encode($data);
 }
-
+// compose
 if (isset($_POST['compose'])) {
     $sendUserId = getSafeData($_POST['sender']);
     $sendMessege = getSafeData($_POST['msg_to_send']);
@@ -160,6 +160,43 @@ if (isset($_POST['compose'])) {
         'status' => $status,
         'msg' => $msg,
         'error_code' => $error
+    ];
+    echo json_encode($data);
+}
+
+// delete inbox to trash
+if (isset($_POST['inbox_id'])) {
+    $updateSql = "update messege set to_status = 2 where id = '" . $_POST['inbox_id'] . "'";
+    if (mysqli_query($conn, $updateSql)) {
+        $status = 200;
+        $msg = "Data Deleted Succefully";
+    } else {
+        $status = 404;
+        $msg = "Data Did Not Deleted";
+    }
+
+    $data = [
+        'status' => $status,
+        'msg' => $msg
+
+    ];
+    echo json_encode($data);
+}
+// delete sendx to trash
+if (isset($_POST['send_id'])) {
+    $updateSql = "update messege set from_status = 2 where id = '" . $_POST['send_id'] . "'";
+    if (mysqli_query($conn, $updateSql)) {
+        $status = 200;
+        $msg = "Data Deleted Succefully";
+    } else {
+        $status = 404;
+        $msg = "Data Did Not Deleted";
+    }
+
+    $data = [
+        'status' => $status,
+        'msg' => $msg
+
     ];
     echo json_encode($data);
 }

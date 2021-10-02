@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,3 +56,7 @@
             </li>
         </ul>
     </nav>
+
+    <h1>
+        Hello , <?php echo $_SESSION['USERNAME']; ?>
+    </h1>

@@ -20,7 +20,16 @@ include 'header.php';
                         while ($row = mysqli_fetch_assoc($selectData)) {
                             $value = $row['id'];
                             $show = $row['username'];
-                            echo  "<option value='" . $value . "'>$show</option>";
+                            if ($value == $_SESSION['ID']) {
+                                $value = null;
+                            }
+                            if ($show == $_SESSION['USERNAME']) {
+                                $show = null;
+                            }
+                            if ($show != null && $value != null) {
+
+                                echo  "<option value='" . $value . "'>$show</option>";
+                            }
                         }
                     }
                     ?>

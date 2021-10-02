@@ -6,7 +6,7 @@ include 'header.php';
 if (!isset($_SESSION['USERNAME'])) {
     header("location: login.php");
 }
-$sql = "select * from messege where to_id = '{$_SESSION['ID']}'";
+$sql = "select * from messege where to_id = '{$_SESSION['ID']}' and to_status = 1";
 $inboxQuery = mysqli_query($conn, $sql);
 
 ?>
@@ -33,15 +33,16 @@ $inboxQuery = mysqli_query($conn, $sql);
                     if (mysqli_num_rows($inboxQuery) > 0) {
 
                         while ($row = mysqli_fetch_assoc($inboxQuery)) { ?>
-                    <tr>
+                    <tr id="<?php echo "inbox_msg_id_" . $row['id']; ?>">
                         <th scope="row"><?= $row['id']; ?></th>
-                        <td><?php getName($row['from_id']); ?></td>
+                        <td><?php getName($row['user_id']); ?></td>
                         <td><a class="text-black"
-                                href="details.php?id=<?= $row['id']; ?>"><?php echo substr($row['messege'], 0, 5); ?></a>
+                                href="details.php?id_inbox=<?= $row['id']; ?>"><?php echo substr($row['messege'], 0, 15); ?></a>
                         </td>
                         <td><?= $row['created_on']; ?></td>
                         <td>
-                            <button class="btn btn-danger" id="<?= $row['id']; ?>">Delete</button>
+                            <button class="btn btn-danger"
+                                onclick="inbox_delete_msg(<?= $row['id']; ?> )">Delete</button>
                         </td>
                     </tr>
                     <?php    }

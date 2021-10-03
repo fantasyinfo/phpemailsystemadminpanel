@@ -46,13 +46,14 @@ if (isset($_POST['register'])) {
 
         $insertQuery = mysqli_query($conn, $sql);
         if ($insertQuery) {
+            $_SESSION['RID'] = mysqli_insert_id($conn);
             $status = 200;
             $msg = "Your Data Inserted Succefully ";
             $userInsertId = mysqli_insert_id($conn);
-            $subject = "Verify Link to Verify Your Email Id for Login to Our Site";
+            $subject = "OTP For Registration On Our Site";
             $msg_mail = "<h1>Hi, $userName </h1> Here is your OTP code for Complete Registration.";
-            $msg_mail .= "</br>";
-            $msg_mail .= $rand_no;
+            $msg_mail .= "</br></br></br>";
+            $msg_mail .= "<h1>" . $rand_no . "</h1>";
             sendMail($userEmail, $subject, $msg_mail);
             $error = false;
         }
@@ -60,6 +61,29 @@ if (isset($_POST['register'])) {
     $data = [
         'status' => $status,
         'msg' => $msg,
+        'error_code' => $error
+    ];
+    echo json_encode($data);
+}
+
+// enter otp
+if (isset($_POST['otp'])) {
+    $otp = getSafeData($_POST['otp']);
+    $id = $_SESSION['RID'];
+    $selectSql = "select * from users where rand_no = '{$otp}'";
+    if (mysqli_query($conn, $selectSql)) {
+        $update = mysqli_query($conn, "update users set status = 1 where id = $id");
+        if ($update) {
+            $error = false;
+            $status = 200;
+        }
+    } else {
+        $error = true;
+        $status = 404;
+        //echo "otp did not mathced";
+    }
+    $data = [
+        'status' => $status,
         'error_code' => $error
     ];
     echo json_encode($data);

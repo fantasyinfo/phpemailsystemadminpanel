@@ -31,6 +31,24 @@ $(document).ready(function () {
           $("#otpForm").show();
           // $("#reg_submit").val("Register");
           // $("#reg_submit").attr("disabled", false);
+          jQuery("#otp_submit").click(function (e) {
+            e.preventDefault();
+            //var otp = jQuery("#otp").val();
+            jQuery.ajax({
+              url: "manage.php",
+              method: "post",
+              data: jQuery("#otpForm").serialize(),
+              success: function (response) {
+                response = jQuery.parseJSON(response);
+                if (response.status == 200) {
+                  jQuery("#otpForm")[0].reset();
+                  window.location.href = "login.php";
+                } else if (response.status == 404) {
+                  alert("OTP Not Mathced");
+                }
+              },
+            });
+          });
         }
         console.log(result);
       },

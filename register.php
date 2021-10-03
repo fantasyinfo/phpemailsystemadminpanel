@@ -41,7 +41,6 @@
                     <label for=otp" class="form-label">OTP</label>
                     <input type="text" class="form-control" id="otp" name="otp">
                 </div>
-                <input type="hidden" name="otp" value="otp">
                 <button type="submit" name="submit" id="otp_submit" class="btn btn-primary">Enter OTP</button>
             </form>
             <div id="submitMsg" class="alert alert-success msg">

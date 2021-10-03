@@ -23,7 +23,8 @@ session_start();
     #passMsg,
     #submitMsg,
     #usernameerror,
-    #Msg {
+    #Msg,
+    #otpForm {
         display: none;
     }
 
@@ -44,6 +45,9 @@ session_start();
             </li>
             <li>
                 <a href="compose.php">Compose</a>
+            </li>
+            <li>
+                <a href="trash.php">Trash</a>
             </li>
             <li>
                 <a href="register.php">Register</a>

@@ -15,12 +15,7 @@ if (isset($_POST['register'])) {
     $userPassword = getSafeData($_POST['password']);
     $userPassword = md5($userPassword);
     $statusInsert = 0;
-    $rand_no = rand("0123456789abcdefghijklmnopqrstuvwxyz", "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-    $rand_no_1 = str_shuffle($rand_no);
-    // $rand_no_2 = $rand_no_1 . substr($rand_no, 0, 10);
-    // $rand_no_3 = $rand_no_2 . time();
-    // $sendRandNo = $rand_no_3;
-    // echo $rand_no;
+    $rand_no = rand(111111111, 999999999);
     $createdOn = date('d, m , Y');
     if ($userEmail == '') {
         $status = 303;
@@ -47,7 +42,7 @@ if (isset($_POST['register'])) {
 
 
     if ($error != true && isset($_POST['email_id']) && !empty($_POST['email_id'])) {
-        $sql = "insert into users (username, email_id, password, status, rand_no, created_on ) values ('{$userName}','{$userEmail}','{$userPassword}','{$statusInsert}', '{$rand_no_1}',now())";
+        $sql = "insert into users (username, email_id, password, status, rand_no, created_on ) values ('{$userName}','{$userEmail}','{$userPassword}','{$statusInsert}', '{$rand_no}',now())";
 
         $insertQuery = mysqli_query($conn, $sql);
         if ($insertQuery) {
@@ -55,9 +50,9 @@ if (isset($_POST['register'])) {
             $msg = "Your Data Inserted Succefully ";
             $userInsertId = mysqli_insert_id($conn);
             $subject = "Verify Link to Verify Your Email Id for Login to Our Site";
-            $msg_mail = "<h1>Hi, $userName </h1> Please Click On Below Link To Veify Your Email Id With us to Login Succesfully   ";
+            $msg_mail = "<h1>Hi, $userName </h1> Here is your OTP code for Complete Registration.";
             $msg_mail .= "</br>";
-            $msg_mail .= "http://localhost/gmailsystem/verify.php?id=$rand_no_1";
+            $msg_mail .= $rand_no;
             sendMail($userEmail, $subject, $msg_mail);
             $error = false;
         }
@@ -170,6 +165,44 @@ if (isset($_POST['inbox_id'])) {
     if (mysqli_query($conn, $updateSql)) {
         $status = 200;
         $msg = "Data Deleted Succefully";
+    } else {
+        $status = 404;
+        $msg = "Data Did Not Deleted";
+    }
+
+    $data = [
+        'status' => $status,
+        'msg' => $msg
+
+    ];
+    echo json_encode($data);
+}
+// delete inbox msg from trash to permanently
+if (isset($_POST['trash_del_id'])) {
+    $updateSql = "update messege set to_status = 3 where id = '" . $_POST['trash_del_id'] . "'";
+    if (mysqli_query($conn, $updateSql)) {
+        $status = 200;
+        $msg = "Data Deleted Succefully";
+    } else {
+        $status = 404;
+        $msg = "Data Did Not Deleted";
+    }
+
+    $data = [
+        'status' => $status,
+        'msg' => $msg
+
+    ];
+    echo json_encode($data);
+}
+
+// restore inbox msg from trash to inbox again
+
+if (isset($_POST['trash_res_id'])) {
+    $updateSql = "update messege set to_status = 1 where id = '" . $_POST['trash_res_id'] . "'";
+    if (mysqli_query($conn, $updateSql)) {
+        $status = 200;
+        $msg = "Data Restored";
     } else {
         $status = 404;
         $msg = "Data Did Not Deleted";

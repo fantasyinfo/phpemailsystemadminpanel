@@ -27,9 +27,10 @@ $(document).ready(function () {
           $("#reg_submit").attr("disabled", false);
         } else if (result.status == 200) {
           $("#submitMsg").show();
-          $("#regForm")[0].reset();
-          $("#reg_submit").val("Register");
-          $("#reg_submit").attr("disabled", false);
+          $("#regForm").hide();
+          $("#otpForm").show();
+          // $("#reg_submit").val("Register");
+          // $("#reg_submit").attr("disabled", false);
         }
         console.log(result);
       },
@@ -114,6 +115,40 @@ function send_delete_msg(id) {
       if (response.status == 200) {
         //alert("hello");
         jQuery("#send_msg_id_" + id).hide();
+      }
+    },
+  });
+}
+
+// delete inbox msg from transh box permanently
+function inbox_trash_delete_msg(id) {
+  jQuery.ajax({
+    url: "manage.php",
+    data: "trash_del_id=" + id,
+    method: "post",
+    success: function (response) {
+      response = jQuery.parseJSON(response);
+      console.log(response);
+      if (response.status == 200) {
+        //alert("hello");
+        jQuery("#trash_msg_id_" + id).hide();
+      }
+    },
+  });
+}
+
+// restore back from transh to inbox
+function restore_inbox_delete_msg(id) {
+  jQuery.ajax({
+    url: "manage.php",
+    data: "trash_res_id=" + id,
+    method: "post",
+    success: function (response) {
+      response = jQuery.parseJSON(response);
+      console.log(response);
+      if (response.status == 200) {
+        //alert("hello");
+        jQuery("#trash_msg_id_" + id).hide();
       }
     },
   });

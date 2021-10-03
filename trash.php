@@ -6,7 +6,7 @@ include 'header.php';
 if (!isset($_SESSION['USERNAME'])) {
     header("location: login.php");
 }
-$sql = "select * from messege where from_id = '{$_SESSION['ID']}' AND from_status = 1";
+$sql = "select * from messege where to_id = '{$_SESSION['ID']}' AND to_status = 2";
 $inboxQuery = mysqli_query($conn, $sql);
 
 
@@ -14,8 +14,9 @@ $inboxQuery = mysqli_query($conn, $sql);
 ?>
 
 <h1>
-    Send Box
+    Trash Box
 </h1>
+
 
 <div class="container">
     <div class="row d-flex my-5 shadow-5 justify-content-center align-items-center">
@@ -25,9 +26,8 @@ $inboxQuery = mysqli_query($conn, $sql);
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">To</th>
-                        <th scope="col">Messege</th>
-                        <th scope="col">Date</th>
+                        <th scope="col">From</th>
+                        <th scope="col">Restore</th>
                         <th scope="col">Delete</th>
                     </tr>
                 </thead>
@@ -36,16 +36,16 @@ $inboxQuery = mysqli_query($conn, $sql);
                     if (mysqli_num_rows($inboxQuery) > 0) {
 
                         while ($row = mysqli_fetch_assoc($inboxQuery)) { ?>
-                    <tr id="<?php echo "send_msg_id_" . $row['id']; ?>">
+                    <tr id="<?php echo "trash_msg_id_" . $row['id']; ?>">
                         <th scope="row"><?= $row['id']; ?></th>
                         <td><?php getName($row['from_id']); ?></td>
-                        <td><a class="text-black"
-                                href="details.php?id_send=<?= $row['id']; ?>"><?php echo substr($row['messege'], 0, 15); ?>
-                        </td>
-                        <td><?= $row['created_on']; ?></td>
+                        <td> <button class="btn btn-success"
+                                onclick="restore_inbox_delete_msg(<?= $row['id']; ?> )">Restore
+                            </button></td>
                         <td>
                             <button class="btn btn-danger"
-                                onclick="send_delete_msg(<?= $row['id']; ?> )">Delete</button>
+                                onclick="inbox_trash_delete_msg(<?= $row['id']; ?> )">Permanent Delete
+                            </button>
                         </td>
                     </tr>
                     <?php    }
